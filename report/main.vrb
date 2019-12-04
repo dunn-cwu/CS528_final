@@ -1,13 +1,24 @@
-\frametitle{Code Example \#2}
-
-\code{\textbf{import} numpy \textbf{as} np}
-
-\begin{lstlisting}[language=Python]
-def code():
-  # test comments #1
-  if True:
-    for _ in range(5):
-      print("Hello World 5 times")
-  return None
-\end{lstlisting}
-
+\frametitle{Animated Plot Procedure}
+\begin{python}
+class animatedScatter:
+    def __init__(self, molXHist, molYHist):
+    self.molXHist = molXHist
+        self.molYHist = molYHist
+        self.fig = plt.figure()
+        self.fig.set_size_inches(PLOT_WIDTH, PLOT_HEIGHT)
+        self.ax = plt.axes(xlim=(0, 1), ylim=(0, 1))
+        self.itertext = self.ax.text(0.70, 0.9,  '', bbox=dict(facecolor='white', alpha=0.2), transform=self.ax.transAxes)
+        print("Creating animation ... Please wait ...")
+        self.ani = FuncAnimation(self.fig, self.update, frames=len(molXHist), interval=30,
+                init_func=self.setup, blit=True)
+        print("Saving gif ... Please wait ...")
+        self.ani.save('final_animated.gif', writer='imagemagick')
+    def setup(self):
+        self.scatter = self.ax.scatter([], [], color = "green")
+        return self.scatter,
+    def update(self, i):
+        self.itertext.set_text('iteration = %d' % (i * ANIM_FRAMES_TIMESTEP))
+        self.scatter.remove()
+        self.scatter = self.ax.scatter(self.molXHist[i], self.molYHist[i], color = "green", alpha=0.2)
+        return self.scatter,
+	\end{python}
