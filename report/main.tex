@@ -21,6 +21,11 @@
 % Font control
 %-----------------------------------------------------------------------------------------
 \usepackage{mathptmx} % Times Roman Font
+\usepackage{pythonhighlight}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{placeins}
+
 %-----------------------------------------------------------------------------------------
 \usepackage{helvet} % Arial/Helvetica font
 \renewcommand{\familydefault}{\sfdefault} % Makes serif text all Helvetica
@@ -78,11 +83,61 @@
 	
 	\section{Methods}\label{methods}
 
-
+	\begin{python}
+	NUM_MOLECULES = 10000
+	RANDOM_WALK_DIST = 0.01
+	
+	# ...
+	
+	for i in range(NUM_MOLECULES):
+		randAngle = np.random.uniform(np.pi * -1, np.pi)
+		randVector = np.array([np.cos(randAngle), np.sin(randAngle)])
+		randVector = randVector * RANDOM_WALK_DIST
+		molX[i] = max(min(molX[i] + randVector[0], 1), 0)
+		molY[i] = max(min(molY[i] + randVector[1], 1), 0)
+	\end{python}
+	
+	\begin{python}
+	class animatedScatter:
+		def __init__(self, molXHist, molYHist):
+			self.molXHist = molXHist
+			self.molYHist = molYHist
+			self.fig = plt.figure()
+			self.fig.set_size_inches(PLOT_WIDTH, PLOT_HEIGHT)
+			self.ax = plt.axes(xlim=(0, 1), ylim=(0, 1))
+			self.itertext = self.ax.text(0.70, 0.9,  '', bbox=dict(facecolor='white', alpha=0.2), transform=self.ax.transAxes)
+			print("Creating animation ... Please wait ...")
+			self.ani = FuncAnimation(self.fig, self.update, frames=len(molXHist), interval=30, 
+			init_func=self.setup, blit=True)
+			print("Saving gif ... Please wait ...")
+			self.ani.save('final_animated.gif', writer='imagemagick')
+			def setup(self):
+			self.scatter = self.ax.scatter([], [], color = "green")
+			return self.scatter,
+		def update(self, i):
+			self.itertext.set_text('iteration = %d' % (i * ANIM_FRAMES_TIMESTEP))
+			self.scatter.remove()
+			self.scatter = self.ax.scatter(self.molXHist[i], self.molYHist[i], color = "green", alpha=0.2)
+			return self.scatter,
+	\end{python}
 	
 	\section{Results}\label{results}
 	
-	
+	\begin{table}[!htb]
+		\caption{Experiment functions} 
+		\small
+		\centering
+		\begin{tabular}{ m{5cm} | m{5cm}}
+			\toprule
+			Number of Molecules & Execution Time (Sec) \\
+			\midrule
+			100    & 7.5 \\
+			1,000  & 74.51 \\
+			10,000 & 725.54 \\
+			\toprule
+		\end{tabular}
+		\label{tab:functions}
+	\end{table}
 	
 	\section{Conclusions}\label{conclusions}
 
