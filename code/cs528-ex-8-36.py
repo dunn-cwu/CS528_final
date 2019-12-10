@@ -1,9 +1,9 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Nov 15 12:22:04 2019
-
-@author: dunna
-"""
+# Course: CS528 - Final Project - EX 8.36
+# Instructor: Dr. Razvan Andonie
+# Student: Andrew Dunn
+# Date: 12/04/2019
+#
+# Built and tested using Python 3.7.
 
 # Execution times:
 # 100 Molecules / 10,000 iterations:    7.5 seconds
@@ -42,6 +42,7 @@ for t in range(TIME_STEPS):
     if tPer > lastTPer:
         print("% Completed:", tPer)
         lastTPer = tPer
+    # Apply random walk to all molecules
     for i in range(NUM_MOLECULES):
         randAngle = np.random.uniform(np.pi * -1, np.pi)
         randVector = np.array([np.cos(randAngle), np.sin(randAngle)])
@@ -49,6 +50,7 @@ for t in range(TIME_STEPS):
         molX[i] = max(min(molX[i] + randVector[0], 1), 0)
         molY[i] = max(min(molY[i] + randVector[1], 1), 0)
         
+    # Only save the iterations to history arrays that we will animate in the gif
     if t % ANIM_FRAMES_TIMESTEP == 0:
         molXHist.append(molX.copy())
         molYHist.append(molY.copy())
